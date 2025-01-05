@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { apiRequest } from '@/lib/api';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { apiRequest } from "@/lib/api";
 
 export default function Signup() {
   const router = useRouter();
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
-  const [error, setError] = useState('');
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,11 +15,15 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     try {
-      const { token } = await apiRequest('/api/auth?action=signup', 'POST', form);
-      localStorage.setItem('token', token);
-      router.push('/');
+      const { token } = await apiRequest(
+        "/api/auth?action=register",
+        "POST",
+        form
+      );
+      localStorage.setItem("token", token);
+      router.push("/");
     } catch (err: any) {
       setError(err.message);
     }
@@ -28,7 +32,9 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center text-gray-700">Sign Up</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center text-gray-700">
+          Sign Up
+        </h1>
         {error && <p className="text-red-600 mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input

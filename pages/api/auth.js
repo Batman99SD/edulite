@@ -10,10 +10,12 @@ export default async function handler(req, res) {
 
   if (method === 'POST') {
     const { name, email, password } = req.body;
+    console.log('Request Body:', { name, email, password });
 
     if (req.query.action === 'register') {
       try {
         const hashedPassword = await bcrypt.hash(password, 10);
+        console.log('Hashed Password:', hashedPassword);
 
         const user = await prisma.user.create({
           data: {
@@ -22,9 +24,13 @@ export default async function handler(req, res) {
             password: hashedPassword,
           },
         });
+        console.log('User created:', user);
 
-        res.status(201).json({ message: 'User registered successfully', user });
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.status(201).json({ message: 'User registered successfully', user, token });
       } catch (error) {
+        console.error('Registration Error:', error.message);
         console.error('Registration Error:', error);
         res.status(400).json({ error: 'User already exists or registration failed' });
       }
