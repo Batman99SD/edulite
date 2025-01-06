@@ -1,5 +1,5 @@
 import React from "react";
-import Testimonial from "./TestimonialCard";
+import Testimonial from "../components/TestimonialCard";
 
 const testimonials = [
   {
