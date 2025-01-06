@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-// /src/app/about/page.tsx
->>>>>>> frontend
 import React from "react";
 
 export default function AboutPage() {
@@ -13,9 +9,5 @@ export default function AboutPage() {
         learners worldwide.
       </p>
     </div>
-  );
-<<<<<<< HEAD
-}
-=======
-}
->>>>>>> frontend
+    );
+  }
