@@ -20,4 +20,10 @@ model Course {
   title       String
   description String
   instructor  String
+  link        String
+  imageSrc    String
+  category    String
+  duration    String
+  difficulty  String
+  rating      number
 }
