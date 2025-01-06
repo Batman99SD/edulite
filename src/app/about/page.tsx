@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+// /src/app/about/page.tsx
+>>>>>>> frontend
 import React from "react";
 
 export default function AboutPage() {
@@ -10,4 +14,8 @@ export default function AboutPage() {
       </p>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> frontend
