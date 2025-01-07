@@ -38,6 +38,22 @@ const Navbar = () => {
             About
           </a>
         </li>
+
+        <li>
+          <a href="/admin" className="text-white hover:underline">
+            Admin Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="/login" className="text-white hover:underline">
+            Login
+          </a>
+        </li>
+        <li>
+          <a href="/signup" className="text-white hover:underline">
+            Signup
+          </a>
+        </li>
         {isLoggedIn ? (
           <>
             <li>
