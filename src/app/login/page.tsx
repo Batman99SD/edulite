@@ -20,12 +20,14 @@ export default function Login() {
     e.preventDefault();
     setError("");
     try {
-      const { token } = await apiRequest(
+      const { token, user } = await apiRequest(
         "/api/auth?action=login",
         "POST",
         form
       );
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      console.log(user);
       router.push("/");
     } catch (err: any) {
       setError(err.message);

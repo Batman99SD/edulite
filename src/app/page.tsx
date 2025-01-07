@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import CourseCard from "./components/courses/CourseCard";
+import CourseCard from "./components/CourseCard";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "./components/Navbar";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import Testimonial from "./components/Testimonials/Testimonial";
+import Testimonial from "./Testimonials/Testimonial";
+import courses from "@/data/coursesData";
+import enrolledCourses from "@/data/enrolledCourses";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,7 +20,16 @@ export default function Home() {
     const user = localStorage.getItem("user");
     if (token) {
       setIsLoggedIn(true);
-      setUserName(user ? JSON.parse(user).name : "user");
+      try {
+        if (user) {
+          console.log("Raw user data from localStorage:", user);
+          const userData = JSON.parse(user);
+          console.log("Parsed user data:", userData);
+          setUserName(userData.name);
+        }
+      } catch (error) {
+        console.error("Error parsing user data from localStorage", error);
+      }
     }
   }, []);
 
@@ -59,7 +70,7 @@ export default function Home() {
             {/* Logged-In View */}
             <section className="text-center mb-10">
               <h2 className="text-4xl font-bold mb-4 text-gray-800">
-                Welcome back, {userName}!
+                Welcome back!
               </h2>
               <p className="text-lg text-gray-700">
                 Keep pushing towards your goals. You've got this!
@@ -74,30 +85,9 @@ export default function Home() {
               </p>
             </section>
             <section className="flex flex-wrap justify-center gap-8 mb-10">
-              <CourseCard
-                imageSrc="/course3.jpg"
-                title="Recommended Course"
-                description="Discover new opportunities."
-                link="/course/3"
-              />
-              <CourseCard
-                imageSrc="/course3.jpg"
-                title="Recommended Course"
-                description="Discover new opportunities."
-                link="/course/3"
-              />
-              <CourseCard
-                imageSrc="/course3.jpg"
-                title="Recommended Course"
-                description="Discover new opportunities."
-                link="/course/3"
-              />
-              <CourseCard
-                imageSrc="/course3.jpg"
-                title="Recommended Course"
-                description="Discover new opportunities."
-                link="/course/3"
-              />
+              {courses.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
             </section>
 
             <section className="w-full max-w-5xl mb-10">
@@ -105,18 +95,9 @@ export default function Home() {
                 Your Enrolled Courses
               </h3>
               <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                <CourseCard
-                  imageSrc="/course1.jpg"
-                  title="JavaScript for Beginners"
-                  description="Progress: 50%"
-                  link="/course/1"
-                />
-                <CourseCard
-                  imageSrc="/course2.jpg"
-                  title="UI/UX Design Essentials"
-                  description="Progress: 30%"
-                  link="/course/2"
-                />
+                {enrolledCourses.map((course) => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
               </div>
             </section>
 
@@ -196,24 +177,9 @@ export default function Home() {
                 Explore Our Top Courses
               </h3>
               <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                <CourseCard
-                  imageSrc="/course1.jpg"
-                  title="Course Title 1"
-                  description="Brief description of the course."
-                  link="/course/1"
-                />
-                <CourseCard
-                  imageSrc="/course2.jpg"
-                  title="Course Title 2"
-                  description="Brief description of the course."
-                  link="/course/2"
-                />
-                <CourseCard
-                  imageSrc="/course3.jpg"
-                  title="Course Title 3"
-                  description="Brief description of the course."
-                  link="/course/3"
-                />
+                {courses.map((course) => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
               </div>
             </section>
             <Testimonial />
