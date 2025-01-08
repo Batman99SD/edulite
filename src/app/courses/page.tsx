@@ -1,9 +1,51 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import CourseCard from "../components/CourseCard";
 import Navbar from "../components/Navbar";
-import courses from "@/data/coursesData";
 
-export default function CoursesPage() {
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+}
+
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  users?: User[];
+}
+
+interface CoursesPageProps {
+  userId: string;
+}
+
+export default function CoursesPage({ userId }: CoursesPageProps) {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/courses");
+        const data = await response.json();
+        setCourses(data);
+        // Filter enrolled courses based on userId
+        const enrolled = data.filter((course: Course) =>
+          course.users?.some((user: User) => user.id === userId)
+        );
+        setEnrolledCourses(enrolled);
+      } catch (error) {
+        console.error("Failed to fetch courses:", error);
+      }
+    };
+
+    fetchCourses();
+  }, [userId]);
+
   return (
     <>
       <Navbar />
@@ -20,6 +62,18 @@ export default function CoursesPage() {
             <CourseCard key={course.id} course={course} />
           ))}
         </div>
+        {enrolledCourses.length > 0 && (
+          <section className="w-full mt-12">
+            <h2 className="text-4xl font-bold mb-6 text-gray-800 text-center">
+              Enrolled Courses
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+              {enrolledCourses.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </>
   );

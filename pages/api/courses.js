@@ -41,7 +41,45 @@ export default async function handler(req, res) {
     // 📝 POST: CREATE A NEW COURSE (Admin Only)
     case 'POST':
       return authenticateToken(req, res, async () => {
-        const { title, description, instructor, videoUrl } = req.body;
+        const { action } = req.body;
+
+        if (action === 'enroll') {
+          // 📝 ENROLL USER IN A COURSE
+          const { courseId } = req.body;
+          const userId = req.user.userId;
+    
+          if (!courseId) {
+            return res.status(400).json({ error: 'Course ID is required' });
+          }
+    
+          try {
+            // Check if the course exists
+            const course = await prisma.course.findUnique({
+              where: { id: courseId },
+            });
+    
+            if (!course) {
+              return res.status(404).json({ error: 'Course not found' });
+            }
+    
+            // Enroll the user in the course
+            const enrollment = await prisma.user.update({
+              where: { id: userId },
+              data: {
+                courses: {
+                  connect: { id: courseId },
+                },
+              },
+            });
+    
+            return res.status(200).json({ message: 'Enrolled successfully', enrollment });
+          } catch (error) {
+            console.error('Error enrolling in course:', error);
+            return res.status(500).json({ error: 'Enrollment failed' });
+          }
+          
+        } else if (!action || action === 'create') {
+          const { title, description, instructor, videoUrl } = req.body;
 
         if (!title || !description || !instructor || !videoUrl) {
           return res.status(400).json({ error: 'All fields are required' });
@@ -61,7 +99,9 @@ export default async function handler(req, res) {
           console.error('Error creating course:', error);
           return res.status(400).json({ error: 'Failed to create course' });
         }
-      });
+      }
+    });
+      
 
     default:
       res.setHeader('Allow', ['GET', 'POST']);

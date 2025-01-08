@@ -14,7 +14,7 @@ model User {
   password String
   role     String @default("user")
 
-  Enrollments Enrollment[]
+  courses  Course[]  @relation("Enrollment")
 }
 
 model Course {
@@ -30,7 +30,7 @@ model Course {
   instructor  String
   content     String[] @default([])
 
-  Enrollments Enrollment[]
+  users       User[]   @relation("Enrollment")
 }
 
 model Enrollment {
@@ -40,4 +40,6 @@ model Enrollment {
   user        User     @relation(fields: [userId], references: [id])
   course      Course   @relation(fields: [courseId], references: [id])
   createdAt   DateTime @default(now())
+
+  @@unique([userId, courseId]) // Composite unique constraint
 }

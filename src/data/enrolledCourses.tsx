@@ -9,7 +9,7 @@ const enrolledCourses = [
     duration: "6 weeks",
     difficulty: "Intermediate",
     rating: 4.8,
-    link: "/course/react",
+    link: "/course/5",
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const enrolledCourses = [
     duration: "10 weeks",
     difficulty: "Advanced",
     rating: 4.9,
-    link: "/course/machine-learning",
+    link: "/course/6",
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const enrolledCourses = [
     duration: "8 weeks",
     difficulty: "Beginner",
     rating: 4.7,
-    link: "/course/python-data-science",
+    link: "/course/7",
   },
   {
     id: 4,
@@ -45,7 +45,7 @@ const enrolledCourses = [
     duration: "5 weeks",
     difficulty: "Beginner",
     rating: 4.6,
-    link: "/course/web-design",
+    link: "/course/8",
   },
   // Add more enrolled courses
 ];
