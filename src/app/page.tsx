@@ -13,23 +13,11 @@ import enrolledCourses from "@/data/enrolledCourses";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
     if (token) {
       setIsLoggedIn(true);
-      try {
-        if (user) {
-          console.log("Raw user data from localStorage:", user);
-          const userData = JSON.parse(user);
-          console.log("Parsed user data:", userData);
-          setUserName(userData.name);
-        }
-      } catch (error) {
-        console.error("Error parsing user data from localStorage", error);
-      }
     }
   }, []);
 
@@ -76,26 +64,27 @@ export default function Home() {
                 Keep pushing towards your goals. You've got this!
               </p>
             </section>
-            <section className="text-center mb-10">
-              <h2 className="text-3xl font-semibold mb-4 text-gray-700">
-                Recommended Courses
-              </h2>
-              <p className="text-lg text-gray-700">
-                Explore new topics and expand your knowledge.
-              </p>
-            </section>
-            <section className="flex flex-wrap justify-center gap-8 mb-10">
-              {courses.map((course) => (
-                <CourseCard key={course.id} course={course} />
-              ))}
-            </section>
-
-            <section className="w-full max-w-5xl mb-10">
-              <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+            <section className="w-full max-w-7xl gap-8 mb-10">
+              <h2 className="text-3xl font-semibold mb-4 text-gray-800">
                 Your Enrolled Courses
-              </h3>
-              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              </h2>
+              <div className="grid gap-8 mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 {enrolledCourses.map((course) => (
+                  <CourseCard key={course.id} course={course} />
+                ))}
+              </div>
+            </section>
+            <section>
+              <div className="text-center mb-10">
+                <h2 className="text-3xl font-semibold mb-4 text-gray-700">
+                  Recommended Courses
+                </h2>
+                <p className="text-lg text-gray-700">
+                  Explore new topics and expand your knowledge.
+                </p>
+              </div>
+              <div className="grid gap-8 mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {courses.map((course) => (
                   <CourseCard key={course.id} course={course} />
                 ))}
               </div>

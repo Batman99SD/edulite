@@ -5,7 +5,7 @@ const testimonials = [
   {
     name: "John Doe",
     role: "Web Developer",
-    image: "/student1.jpg",
+    image: "/images/p1.jpeg",
     feedback:
       "Edulite has completely changed the way I learn. The courses are well-structured and the instructors are top-notch!",
     rating: 4.5,
@@ -13,7 +13,7 @@ const testimonials = [
   {
     name: "Jane Smith",
     role: "Data Scientist",
-    image: "/student2.jpg",
+    image: "/images/p-5.jpeg",
     feedback:
       "Thanks to Edulite, I landed my dream job. The hands-on projects and career support are amazing!",
     rating: 5,
@@ -21,7 +21,7 @@ const testimonials = [
   {
     name: "Emily Johnson",
     role: "UX Designer",
-    image: "/student3.jpg",
+    image: "/images/p2.png",
     feedback:
       "Edulite's interactive courses made learning so much fun and effective. Highly recommend it!",
     rating: 4.5,

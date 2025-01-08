@@ -27,6 +27,7 @@ export default function Signup() {
       localStorage.setItem("user", JSON.stringify(user));
       router.push("/");
     } catch (err: any) {
+      console.error("Signup error:", err);
       setError(err.message);
     }
   };

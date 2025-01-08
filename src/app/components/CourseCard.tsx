@@ -27,7 +27,7 @@ export default function CourseCard({ course }: CourseCardProps) {
 
   return (
     <div className="border rounded-lg overflow-hidden shadow-lg">
-      <img src={imageSrc} alt={title} className="w-full h-48 object-cover" />
+      <img src={imageSrc} alt={title} className="w-full h-56 object-cover" />
       <div className="p-4">
         <h2 className="text-xl text-gray-700 font-semibold mb-2">{title}</h2>
         <p className="text-gray-600 mb-2">{category}</p>

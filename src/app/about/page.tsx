@@ -67,23 +67,23 @@ export default function AboutPage() {
           </p>
           <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <TeamMemberCard
-              photo="/team-member-1.jpg"
-              name="Jane Doe"
+              photo="/images/team1.jpg"
+              name="Adam Keylane"
               role="CEO & Founder"
             />
             <TeamMemberCard
-              photo="/team-member-2.jpg"
+              photo="/images/p-5.jpeg"
               name="John Smith"
               role="Head of Education"
             />
             <TeamMemberCard
-              photo="/team-member-3.jpg"
-              name="Emily Johnson"
+              photo="/images/p4.avif"
+              name="Fatima Ademyo"
               role="Marketing Lead"
             />
           </div>
         </section>
       </main>
     </div>
-    );
-  }
+  );
+}

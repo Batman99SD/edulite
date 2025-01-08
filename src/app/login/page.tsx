@@ -26,7 +26,6 @@ export default function Login() {
         form
       );
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
       console.log(user);
       router.push("/");
     } catch (err: any) {

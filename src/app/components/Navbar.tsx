@@ -45,11 +45,6 @@ const Navbar = () => {
                 Profile
               </a>
             </li>
-               <li>
-             <a href="/admin" className="text-white hover:underline">
-                Admin Dashboard
-              </a>
-            </li>
             <li>
               <button
                 onClick={handleLogout}
