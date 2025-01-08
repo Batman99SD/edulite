@@ -7,18 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// User Model
 model User {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
-  email    String @unique
+  email    String   @unique
   password String
-  role     String @default("user")
+  role     String   @default("user")
 
-  courses  Course[]  @relation("Enrollment")
+  courses  Enrollment[]
 }
 
+// Course Model
 model Course {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   category    String
@@ -28,11 +30,12 @@ model Course {
   rating      Float
   link        String
   instructor  String
-  content     String[] @default([])
+  content     String   // Changed from String[] to String
 
-  users       User[]   @relation("Enrollment")
+  users       Enrollment[]
 }
 
+// Enrollment Model
 model Enrollment {
   id          Int      @id @default(autoincrement())
   userId      Int
