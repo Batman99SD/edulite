@@ -13,11 +13,15 @@ import enrolledCourses from "@/data/enrolledCourses";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEnrolledCourses, setUserEnrolledCourses] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log("token:", token);
     if (token) {
       setIsLoggedIn(true);
+      const userId = localStorage.getItem("id");
+      console.log("userId:", userId);
     }
   }, []);
 
