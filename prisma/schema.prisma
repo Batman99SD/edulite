@@ -9,67 +9,38 @@ datasource db {
 
 // User Model
 model User {
-<<<<<<< HEAD
-  id       Int      @id @default(autoincrement())
-  name     String
-  email    String   @unique
-  password String
-  role     String   @default("user")
-
-  courses  Enrollment[]
-=======
   id          Int          @id @default(autoincrement())
   name        String
   email       String       @unique
   password    String
   role        String       @default("user")
   Enrollments Enrollment[]
->>>>>>> 9d48508e44d9b23317b3c9cf3de6ab5f37cdb3c7
 }
 
 // Course Model
 model Course {
-<<<<<<< HEAD
-  id          Int      @id @default(autoincrement())
-=======
   id          Int          @id @default(autoincrement())
->>>>>>> 9d48508e44d9b23317b3c9cf3de6ab5f37cdb3c7
   title       String
   description String
   instructor  String
-<<<<<<< HEAD
-  content     String   // Changed from String[] to String
-
-  users       Enrollment[]
-=======
   category    String
-  content     String[]     @default([])
+  content     String
   difficulty  String
   duration    String
   imageSrc    String
   link        String
   rating      Float
   Enrollments Enrollment[]
->>>>>>> 9d48508e44d9b23317b3c9cf3de6ab5f37cdb3c7
 }
 
 // Enrollment Model
 model Enrollment {
-<<<<<<< HEAD
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  courseId    Int
-  user        User     @relation(fields: [userId], references: [id])
-  course      Course   @relation(fields: [courseId], references: [id])
-  createdAt   DateTime @default(now())
-
-  @@unique([userId, courseId]) // Composite unique constraint
-=======
   id        Int      @id @default(autoincrement())
   userId    Int
   courseId  Int
   createdAt DateTime @default(now())
   course    Course   @relation(fields: [courseId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
->>>>>>> 9d48508e44d9b23317b3c9cf3de6ab5f37cdb3c7
+
+  @@unique([userId, courseId]) // Composite unique constraint
 }
