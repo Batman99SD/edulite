@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { parse } from 'path';
 
 const prisma = new PrismaClient();
 
@@ -13,11 +14,12 @@ export default async function handler(req, res) {
     try {
       const enrollment = await prisma.enrollment.create({
         data: {
-          userId,
-          courseId,
+          userId: parseInt(userId),
+          courseId: parseInt(courseId),
         },
       });
 
+      console.log("Enrollment created:", enrollment);
       return res.status(201).json({ success: true, enrollment });
     } catch (error) {
       console.error('Error enrolling user:', error);
