@@ -9,12 +9,36 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       return authenticateToken(req, res, async () => {
-        const userId = req.user.id; // Get user ID from token
+        const userId = req.user.id; // Get user ID from the token
 
         try {
+          // Fetch user with enrolled courses
           const user = await prisma.user.findUnique({
             where: { id: userId },
-            select: { id: true, name: true, email: true, role: true },
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              role: true,
+              Enrollments: {
+                select: {
+                  course: {
+                    select: {
+                      id: true,
+                      title: true,
+                      description: true,
+                      category: true,
+                      imageSrc: true,
+                      duration: true,
+                      difficulty: true,
+                      rating: true,
+                      link: true,
+                      instructor: true,
+                    },
+                  },
+                },
+              },
+            },
           });
 
           if (!user) {
