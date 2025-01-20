@@ -26,7 +26,7 @@ export default function Login() {
         form
       );
       localStorage.setItem("token", token);
-      console.log(user);
+      console.log(user.id);
       router.push("/");
     } catch (err: any) {
       setError(err.message);
