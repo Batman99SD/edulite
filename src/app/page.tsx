@@ -9,21 +9,61 @@ import Navbar from "./components/Navbar";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Testimonial from "./Testimonials/Testimonial";
 import courses from "@/data/coursesData";
-import enrolledCourses from "@/data/enrolledCourses";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userEnrolledCourses, setUserEnrolledCourses] = useState([]);
+  const [user, setUser] = useState(null);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [allCourses, setAllCourses] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("token:", token);
+    console.log("token in home:", token);
     if (token) {
       setIsLoggedIn(true);
-      const userId = localStorage.getItem("id");
-      console.log("userId:", userId);
+      fetchUserData(token);
+      fetchAllCourses();
     }
   }, []);
+
+  const fetchUserData = async (token: string) => {
+    try {
+      const response = await fetch("/api/user", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("Headers:", {
+        Authorization: `Bearer ${token}`,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      const userData = await response.json();
+      setUser(userData);
+      setEnrolledCourses(userData.Enrollments.map((e) => e.course)); // Extract enrolled courses
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  const fetchAllCourses = async () => {
+    try {
+      const response = await fetch("/api/courses");
+      if (!response.ok) {
+        throw new Error("Failed to fetch courses.");
+      }
+
+      const coursesData = await response.json();
+      setAllCourses(coursesData);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -62,7 +102,10 @@ export default function Home() {
             {/* Logged-In View */}
             <section className="text-center mb-10">
               <h2 className="text-4xl font-bold mb-4 text-gray-800">
-                Welcome back!
+                {/* Welcome back! */}
+                {isLoggedIn
+                  ? `Welcome back, ${user?.name || "User"}!`
+                  : "Upskill, Explore, and Succeed with our expert-led courses."}
               </h2>
               <p className="text-lg text-gray-700">
                 Keep pushing towards your goals. You've got this!
@@ -88,7 +131,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="grid gap-8 mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                {courses.map((course) => (
+                {allCourses.map((course) => (
                   <CourseCard key={course.id} course={course} />
                 ))}
               </div>

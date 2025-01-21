@@ -16,35 +16,63 @@ interface Course {
   id: string;
   title: string;
   description: string;
-  users?: User[];
+  category: string;
+  imageSrc: string;
+  duration: string;
+  difficulty: string;
+  rating: number;
+  instructor: string;
 }
 
-interface CoursesPageProps {
-  userId: string;
-}
-
-export default function CoursesPage({ userId }: CoursesPageProps) {
-  const [courses, setCourses] = useState<Course[]>([]);
+export default function CoursesPage() {
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
+  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchUserAndCourses = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("User is not logged in.");
+        return;
+      }
       try {
-        const response = await fetch("/api/courses");
-        const data = await response.json();
-        setCourses(data);
-        // Filter enrolled courses based on userId
-        const enrolled = data.filter((course: Course) =>
-          course.users?.some((user: User) => user.id === userId)
-        );
+        // Fetch user and their enrolled courses
+        const userResponse = await fetch("/api/user", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!userResponse.ok) {
+          throw new Error("Failed to fetch user data.");
+        }
+
+        const userData = await userResponse.json();
+        setUserName(userData.name);
+
+        // Extract enrolled courses from user data
+        const enrolled = userData.Enrollments.map((enrollment: any) => ({
+          ...enrollment.course,
+        }));
         setEnrolledCourses(enrolled);
+
+        // Fetch all courses
+        const coursesResponse = await fetch("/api/courses");
+        if (!coursesResponse.ok) {
+          throw new Error("Failed to fetch courses.");
+        }
+
+        const allCoursesData = await coursesResponse.json();
+        setAllCourses(allCoursesData);
       } catch (error) {
-        console.error("Failed to fetch courses:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchCourses();
-  }, [userId]);
+    fetchUserAndCourses();
+  }, []);
 
   return (
     <>
@@ -53,19 +81,24 @@ export default function CoursesPage({ userId }: CoursesPageProps) {
         <h1 className="text-4xl font-bold mb-10 text-center text-gray-700">
           Explore Our Courses
         </h1>
+        {userName && (
+          <p className="text-lg text-gray-600 mb-4 text-center">
+            Welcome back, {userName}!
+          </p>
+        )}
         <p className="text-lg text-gray-600 mb-12 text-center max-w-3xl">
           Whether you want to kickstart a new career, upskill for your current
           job, or learn something new for fun, we have a course for you.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-          {courses.map((course) => (
+          {allCourses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </div>
         {enrolledCourses.length > 0 && (
           <section className="w-full mt-12">
             <h2 className="text-4xl font-bold mb-6 text-gray-800 text-center">
-              Enrolled Courses
+              Your Enrolled Courses
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
               {enrolledCourses.map((course) => (
