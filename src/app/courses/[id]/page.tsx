@@ -34,7 +34,7 @@ export default async function CourseDetailPage({
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex flex-col items-center bg-gray-50 py-10 px-4 sm:px-20">
+        <div className="min-h-screen flex flex-col bg-gray-50 py-10 px-4 sm:px-20">
           <CourseDetail
             title={course.title}
             description={course.description}
