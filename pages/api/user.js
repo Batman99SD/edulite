@@ -9,7 +9,10 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       return authenticateToken(req, res, async () => {
-        const userId = req.user?.id; // Get user ID from the token
+        console.log("Extracted User ID from Token in /api/user:", req.user?.userId);
+
+        const userId = req.user?.userId; // Get user ID from the token
+        console.log("Extracted User ID is missing in /api/user");
 
         if (!userId) {
           return res.status(403).json({error: "Access Denied. User ID missing in token"})
@@ -58,7 +61,7 @@ export default async function handler(req, res) {
 
       case 'PUT':
   return authenticateToken(req, res, async () => {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { name, email } = req.body;
 
     try {

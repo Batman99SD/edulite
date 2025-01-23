@@ -27,7 +27,8 @@ export default async function handler(req, res) {
         console.log('User created:', user);
 
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+        console.log("Generated Token:", token);
+        console.log("User Data in Token:", { userId: user.id });
         res.status(201).json({ message: 'User registered successfully', user, token });
       } catch (error) {
         console.error('Registration Error:', error.message);
