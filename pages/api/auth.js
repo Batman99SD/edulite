@@ -48,7 +48,7 @@ export default async function handler(req, res) {
         }
 
         console.log("User during login:", user);
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
           expiresIn: '1h',
         });
 
