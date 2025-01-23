@@ -36,9 +36,9 @@ export default function CourseDetail({
   console.log("Provided YouTube link:", link);
 
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="min-h-screen bg-gray-50">
       {videoId ? (
-        <div className="w-full h-64">
+        <div className="w-3/4 h-[calc(100vh-24rem)] mx-auto">
           <iframe
             width="100%"
             height="100%"
@@ -50,11 +50,11 @@ export default function CourseDetail({
           ></iframe>
         </div>
       ) : (
-        <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
+        <div className="w-3/4 h-[calc(100vh-24rem)] mx-auto bg-gray-200 flex items-center justify-center">
           <span className="text-gray-500">Video not available</span>
         </div>
       )}
-      <div className="p-6">
+      <div className="p-6 w-3/4 h-[calc(100vh-24rem)] mx-auto">
         <h1 className="text-4xl font-bold text-gray-800 mb-4">{title}</h1>
         <p className="text-gray-600 text-lg mb-4">{description}</p>
         <div className="flex items-center justify-between mb-6">
@@ -62,9 +62,9 @@ export default function CourseDetail({
           <span className="text-gray-500">Level: {difficulty}</span>
           <span className="text-yellow-500">⭐ {rating}</span>
         </div>
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+        {/* <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           What You'll Learn
-        </h2>
+        </h2> */}
         <ul className="list-disc list-inside text-gray-600">
           {content.map((item, index) => (
             <li key={index}>{item}</li>
