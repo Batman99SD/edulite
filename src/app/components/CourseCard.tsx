@@ -24,8 +24,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
   isEnrolled,
   onEnroll,
 }) => {
-  const handleEnrollClick = () => {
-    onEnroll(course.id); // Call onEnroll directly
+  const handleButtonClick = () => {
+    if (isEnrolled) {
+      window.location.href = `/courses/${course.id}`; // Redirect to the course page
+    } else {
+      onEnroll(course.id); // Enroll the user
+    }
   };
 
   return (
@@ -46,15 +50,16 @@ const CourseCard: React.FC<CourseCardProps> = ({
         </p>
         <p className="text-sm text-gray-500">Rating: {course.rating} stars</p>
         <p className="text-sm text-gray-500">Instructor: {course.instructor}</p>
-        <button
-          onClick={handleEnrollClick}
-          className={`mt-4 px-4 py-2 ${
-            isEnrolled ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500"
-          } text-white rounded`}
-          disabled={isEnrolled}
-        >
-          {isEnrolled ? "Enrolled" : "Enroll"}
-        </button>
+        <div className="flex justify-between items-center">
+          <button
+            onClick={handleButtonClick}
+            className={`mt-4 px-4 py-2 ${
+              isEnrolled ? "bg-green-500" : "bg-blue-500"
+            } text-white rounded hover:shadow-lg`}
+          >
+            {isEnrolled ? "View Course" : "Enroll"}
+          </button>
+        </div>
       </div>
     </div>
   );
