@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { parse } from 'path';
 
 const prisma = new PrismaClient();
 
@@ -7,15 +6,31 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { userId, courseId } = req.body;
 
+    // Log incoming request body
+    console.log("Incoming Request Body:", req.body);
+
     if (!userId || !courseId) {
       return res.status(400).json({ error: 'Missing userId or courseId' });
     }
 
     try {
+
+      // Check if the user is already enrolled in the course
+      const existingEnrollment = await prisma.enrollment.findUnique({
+        where: {
+          userId_courseId: { userId: parseInt(userId), courseId: parseInt(courseId) },
+        },
+      });
+
+      if (existingEnrollment) {
+        return res.status(400).json({ error: 'User is already enrolled in this course.' });
+      }
+
       const enrollment = await prisma.enrollment.create({
         data: {
           userId: parseInt(userId),
           courseId: parseInt(courseId),
+          // enrolled: true, // Set enrolled to true
         },
       });
 

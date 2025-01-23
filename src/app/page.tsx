@@ -10,11 +10,25 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Testimonial from "./Testimonials/Testimonial";
 import courses from "@/data/coursesData";
 
+interface Course {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  imageSrc: string;
+  duration: string;
+  difficulty: string;
+  rating: number;
+  instructor: string;
+}
+
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isNewUser, setIsNewUser] = useState(false);
   const [user, setUser] = useState(null);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
-  const [allCourses, setAllCourses] = useState([]);
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState<number[]>([]);
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -23,8 +37,8 @@ export default function Home() {
     if (token) {
       setIsLoggedIn(true);
       fetchUserData(token);
-      fetchAllCourses();
     }
+    fetchAllCourses();
   }, []);
 
   const fetchUserData = async (token: string) => {
@@ -45,8 +59,20 @@ export default function Home() {
       }
 
       const userData = await response.json();
+      console.log("Fetched User Data:", userData);
       setUser(userData);
-      setEnrolledCourses(userData.Enrollments.map((e) => e.course)); // Extract enrolled courses
+
+      setEnrolledCourses(userData.Enrollments.map((e) => e.course));
+      setIsNewUser(
+        userData.Enrollments.length === 0 && !localStorage.getItem("signup")
+      );
+
+      const enrolledIds = userData.Enrollments.map(
+        (enrollment: any) => enrollment.course.id
+      );
+      setEnrolledCourseIds(enrolledIds);
+
+      // setEnrolledCourses(userData.Enrollments.map((e) => e.course)); // Extract enrolled courses
     } catch (err) {
       setError(err.message);
     }
@@ -62,6 +88,52 @@ export default function Home() {
       setAllCourses(coursesData);
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const handleEnroll = async (courseId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please log in to enroll.");
+      return;
+    }
+
+    try {
+      // Fetch user info to get userId
+      const userResponse = await fetch("/api/user", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!userResponse.ok) {
+        throw new Error("Failed to fetch user data.");
+      }
+
+      const userData = await userResponse.json();
+      const userId = userData.id; // Assuming the response has `id`
+
+      const response = await fetch("/api/enroll", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ courseId, userId }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.error || "Failed to enroll.");
+        return;
+      }
+
+      setEnrolledCourseIds((prev) => [...prev, courseId]);
+      alert("Enrolled successfully!");
+    } catch (error) {
+      console.error("Enrollment error:", error);
+      alert("An unexpected error occurred.");
     }
   };
 
@@ -103,24 +175,36 @@ export default function Home() {
             <section className="text-center mb-10">
               <h2 className="text-4xl font-bold mb-4 text-gray-800">
                 {/* Welcome back! */}
-                {isLoggedIn
-                  ? `Welcome back, ${user?.name || "User"}!`
-                  : "Upskill, Explore, and Succeed with our expert-led courses."}
+                {isNewUser
+                  ? `Welcome, ${user?.name || "User"}!`
+                  : `Welcome back, ${user?.name || "User"}!`}
               </h2>
               <p className="text-lg text-gray-700">
-                Keep pushing towards your goals. You've got this!
+                {isNewUser
+                  ? "Explore and enroll in your first course today!"
+                  : "Continue learning and achieving your goals!"}
               </p>
+              {/* <p className="text-lg text-gray-700">
+                Keep pushing towards your goals. You've got this!
+              </p> */}
             </section>
-            <section className="w-full max-w-7xl gap-8 mb-10">
-              <h2 className="text-3xl font-semibold mb-4 text-gray-800">
-                Your Enrolled Courses
-              </h2>
-              <div className="grid gap-8 mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                {enrolledCourses.map((course) => (
-                  <CourseCard key={course.id} course={course} />
-                ))}
-              </div>
-            </section>
+            {enrolledCourses.length > 0 && (
+              <section className="w-full max-w-7xl gap-8 mb-10">
+                <h2 className="text-3xl font-semibold mb-4 text-gray-800">
+                  Your Enrolled Courses
+                </h2>
+                <div className="grid gap-8 mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                  {enrolledCourses.map((course) => (
+                    <CourseCard
+                      key={course.id}
+                      course={course}
+                      isEnrolled={enrolledCourseIds.includes(course.id)}
+                      onEnroll={handleEnroll}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
             <section>
               <div className="text-center mb-10">
                 <h2 className="text-3xl font-semibold mb-4 text-gray-700">
@@ -132,7 +216,12 @@ export default function Home() {
               </div>
               <div className="grid gap-8 mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {allCourses.map((course) => (
-                  <CourseCard key={course.id} course={course} />
+                  <CourseCard
+                    key={course.id}
+                    course={course}
+                    isEnrolled={enrolledCourseIds.includes(course.id)}
+                    onEnroll={handleEnroll}
+                  />
                 ))}
               </div>
             </section>
@@ -214,7 +303,12 @@ export default function Home() {
               </h3>
               <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {courses.map((course) => (
-                  <CourseCard key={course.id} course={course} />
+                  <CourseCard
+                    key={course.id}
+                    course={course}
+                    isEnrolled={enrolledCourseIds.includes(course.id)}
+                    onEnroll={handleEnroll}
+                  />
                 ))}
               </div>
             </section>

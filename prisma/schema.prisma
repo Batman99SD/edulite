@@ -38,6 +38,7 @@ model Enrollment {
   id        Int      @id @default(autoincrement())
   userId    Int
   courseId  Int
+  enrolled  Boolean  @default(true) // Add enrolled field
   createdAt DateTime @default(now())
   course    Course   @relation(fields: [courseId], references: [id])
   user      User     @relation(fields: [userId], references: [id])

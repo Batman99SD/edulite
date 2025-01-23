@@ -7,7 +7,7 @@ export default function AdminDashboard() {
   const [userData, setUserData] = useState({
     name: "",
     email: "",
-    role: "",
+    // role: "",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "" });
@@ -160,12 +160,12 @@ export default function AdminDashboard() {
                   </label>
                   <p className="text-gray-900">{userData.email}</p>
                 </div>
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Role:
                   </label>
                   <p className="text-gray-900">{userData.role}</p>
-                </div>
+                </div> */}
                 <button
                   onClick={handleEditToggle}
                   className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"

@@ -4,16 +4,8 @@ import React, { useState, useEffect } from "react";
 import CourseCard from "../components/CourseCard";
 import Navbar from "../components/Navbar";
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-}
-
 interface Course {
-  id: string;
+  id: number;
   title: string;
   description: string;
   category: string;
@@ -26,7 +18,7 @@ interface Course {
 
 export default function CoursesPage() {
   const [allCourses, setAllCourses] = useState<Course[]>([]);
-  const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState<number[]>([]);
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,6 +28,7 @@ export default function CoursesPage() {
         console.error("User is not logged in.");
         return;
       }
+
       try {
         // Fetch user and their enrolled courses
         const userResponse = await fetch("/api/user", {
@@ -52,11 +45,11 @@ export default function CoursesPage() {
         const userData = await userResponse.json();
         setUserName(userData.name);
 
-        // Extract enrolled courses from user data
-        const enrolled = userData.Enrollments.map((enrollment: any) => ({
-          ...enrollment.course,
-        }));
-        setEnrolledCourses(enrolled);
+        // Extract enrolled course IDs from user data
+        const enrolledIds = userData.Enrollments.map(
+          (enrollment: any) => enrollment.course.id
+        );
+        setEnrolledCourseIds(enrolledIds);
 
         // Fetch all courses
         const coursesResponse = await fetch("/api/courses");
@@ -73,6 +66,52 @@ export default function CoursesPage() {
 
     fetchUserAndCourses();
   }, []);
+
+  const handleEnroll = async (courseId: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please log in to enroll.");
+      return;
+    }
+
+    try {
+      // Fetch user info to get userId
+      const userResponse = await fetch("/api/user", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!userResponse.ok) {
+        throw new Error("Failed to fetch user data.");
+      }
+
+      const userData = await userResponse.json();
+      const userId = userData.id; // Assuming the response has `id`
+
+      const response = await fetch("/api/enroll", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ courseId, userId }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.error || "Failed to enroll.");
+        return;
+      }
+
+      setEnrolledCourseIds((prev) => [...prev, courseId]);
+      alert("Enrolled successfully!");
+    } catch (error) {
+      console.error("Enrollment error:", error);
+      alert("An unexpected error occurred.");
+    }
+  };
 
   return (
     <>
@@ -92,21 +131,14 @@ export default function CoursesPage() {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
           {allCourses.map((course) => (
-            <CourseCard key={course.id} course={course} />
+            <CourseCard
+              key={course.id}
+              course={course}
+              isEnrolled={enrolledCourseIds.includes(course.id)}
+              onEnroll={handleEnroll} // Pass handleEnroll function here
+            />
           ))}
         </div>
-        {enrolledCourses.length > 0 && (
-          <section className="w-full mt-12">
-            <h2 className="text-4xl font-bold mb-6 text-gray-800 text-center">
-              Your Enrolled Courses
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-              {enrolledCourses.map((course) => (
-                <CourseCard key={course.id} course={course} />
-              ))}
-            </div>
-          </section>
-        )}
       </div>
     </>
   );
