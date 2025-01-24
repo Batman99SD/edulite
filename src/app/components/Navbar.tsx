@@ -29,17 +29,17 @@ const Navbar = () => {
           </a>
         </li>
         <li>
-          <a href="/courses" className="text-white hover:underline">
-            Courses
-          </a>
-        </li>
-        <li>
           <a href="/about" className="text-white hover:underline">
             About
           </a>
         </li>
         {isLoggedIn ? (
           <>
+            <li>
+              <a href="/courses" className="text-white hover:underline">
+                Courses
+              </a>
+            </li>
             <li>
               <a href="/dashboard" className="text-white hover:underline">
                 Profile

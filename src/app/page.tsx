@@ -1,14 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import CourseCard from "./components/CourseCard";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Navbar from "./components/Navbar";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Testimonial from "./Testimonials/Testimonial";
-import courses from "@/data/coursesData";
 
 interface Course {
   id: number;
@@ -239,61 +236,39 @@ export default function Home() {
         ) : (
           <>
             {/* Logged-Out View */}
-            <section className="text-center mb-10">
-              <h2 className="text-4xl font-bold mb-6 text-gray-800">
-                Why Choose Edulite?
-              </h2>
-              <div className="flex flex-wrap justify-center gap-8">
-                {/* Expert Instructors */}
-                <div className="flex flex-col items-center">
-                  <div className="p-6 bg-blue-100 text-blue-600 rounded-full shadow-lg hover:scale-110 transform transition-all">
-                    <i className="fas fa-chalkboard-teacher text-4xl"></i>
+            <section className="py-16 bg-white">
+              <div className="max-w-7xl mx-auto px-6 text-center">
+                <h2 className="text-3xl text-gray-700 font-bold mb-8">
+                  Why Choose Edulite?
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <div className="p-6 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                    <i className="fas fa-graduation-cap text-blue-500 text-4xl mb-4"></i>
+                    <h3 className="text-xl text-gray-600 font-semibold mb-2">
+                      Expert Instructors
+                    </h3>
+                    <p className="text-gray-600">
+                      Learn from industry-leading experts across various fields.
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-700 mt-4">
-                    Expert Instructors
-                  </h3>
-                  <p className="text-gray-600 mt-2 max-w-xs">
-                    Learn from the best in the industry.
-                  </p>
-                </div>
-
-                {/* Flexible Learning */}
-                <div className="flex flex-col items-center">
-                  <div className="p-6 bg-green-100 text-green-600 rounded-full shadow-lg hover:scale-110 transform transition-all">
-                    <i className="fas fa-clock text-4xl"></i>
+                  <div className="p-6 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                    <i className="fas fa-book text-blue-500 text-4xl mb-4"></i>
+                    <h3 className="text-xl text-gray-600 font-semibold mb-2">
+                      Comprehensive Content
+                    </h3>
+                    <p className="text-gray-600">
+                      Access a wide range of up-to-date, engaging materials.
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-700 mt-4">
-                    Flexible Learning
-                  </h3>
-                  <p className="text-gray-600 mt-2 max-w-xs">
-                    Study at your own pace, anytime.
-                  </p>
-                </div>
-
-                {/* Affordable Pricing */}
-                <div className="flex flex-col items-center">
-                  <div className="p-6 bg-yellow-100 text-yellow-600 rounded-full shadow-lg hover:scale-110 transform transition-all">
-                    <i className="fas fa-dollar-sign text-4xl"></i>
+                  <div className="p-6 bg-gray-50 rounded-lg shadow hover:shadow-lg transition duration-300">
+                    <i className="fas fa-chart-line text-blue-500 text-4xl mb-4"></i>
+                    <h3 className="text-xl text-gray-600 font-semibold mb-2">
+                      Track Your Progress
+                    </h3>
+                    <p className="text-gray-600">
+                      Monitor your learning journey with intuitive tools.
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-700 mt-4">
-                    Affordable Pricing
-                  </h3>
-                  <p className="text-gray-600 mt-2 max-w-xs">
-                    Access high-quality education for less.
-                  </p>
-                </div>
-
-                {/* Interactive Courses */}
-                <div className="flex flex-col items-center">
-                  <div className="p-6 bg-purple-100 text-purple-600 rounded-full shadow-lg hover:scale-110 transform transition-all">
-                    <i className="fas fa-laptop-code text-4xl"></i>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-700 mt-4">
-                    Interactive Courses
-                  </h3>
-                  <p className="text-gray-600 mt-2 max-w-xs">
-                    Engaging lessons with hands-on activities.
-                  </p>
                 </div>
               </div>
             </section>
@@ -302,7 +277,7 @@ export default function Home() {
                 Explore Our Top Courses
               </h3>
               <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                {courses.map((course) => (
+                {allCourses.slice(0, 6).map((course) => (
                   <CourseCard
                     key={course.id}
                     course={course}
