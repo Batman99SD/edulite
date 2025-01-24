@@ -223,7 +223,7 @@ export default function Home() {
               </div>
             </section>
 
-            <button
+            {/* <button
               onClick={() => {
                 localStorage.clear();
                 window.location.reload();
@@ -231,7 +231,7 @@ export default function Home() {
               className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
             >
               Logout
-            </button>
+            </button> */}
           </>
         ) : (
           <>
@@ -289,7 +289,7 @@ export default function Home() {
             </section>
             <Testimonial />
 
-            <div className="flex gap-4 items-center flex-col sm:flex-row">
+            {/* <div className="flex gap-4 items-center flex-col sm:flex-row">
               <Link href="/login">
                 <span className="text-blue-600 hover:text-blue-800 transition-colors cursor-pointer">
                   Login
@@ -300,7 +300,7 @@ export default function Home() {
                   Signup
                 </span>
               </Link>
-            </div>
+            </div> */}
           </>
         )}
       </main>

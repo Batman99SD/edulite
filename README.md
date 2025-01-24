@@ -1,36 +1,180 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Edulite - E-learning Platform
 
-## Getting Started
+Welcome to **Edulite**, a feature-rich e-learning platform designed to enhance online education. Built with a modern web stack, Edulite offers a seamless experience for students and administrators.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. [About the Project](#about-the-project)
+2. [Features](#features)
+3. [Tech Stack](#tech-stack)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Folder Structure](#folder-structure)
+7. [API Endpoints](#api-endpoints)
+8. [Future Improvements](#future-improvements)
+9. [Contributors](#contributors)
+
+---
+
+## About the Project
+
+Edulite is an e-learning platform that enables users to browse, enroll in, and manage courses. It also includes role-based access for administrators to manage course content. The platform leverages modern technologies to ensure a user-friendly and responsive experience.
+
+---
+
+## Features
+
+- **Authentication:**
+
+  - User signup and login.
+  - Role-based access (Admin and User).
+
+- **Courses:**
+
+  - Browse available courses.
+  - Enroll in courses.
+  - View enrolled courses.
+
+- **Responsive Design:**
+  - Optimized for both desktop and mobile devices.
+- **Secure Backend:**
+  - User authentication with session management.
+
+---
+
+## Tech Stack
+
+- **Frontend:** Next.js, Tailwind CSS
+- **Backend:** Node.js, Prisma
+- **Database:** PostgreSQL
+
+---
+
+## Installation
+
+To set up the project locally, follow these steps:
+
+### Prerequisites
+
+1. Install [Node.js](https://nodejs.org/) (v16+ recommended).
+2. Install [PostgreSQL](https://www.postgresql.org/).
+3. Clone the repository:
+
+```sh
+   git clone https://github.com/your-username/edulite.git
+   cd edulite
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Install dependencies:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```sh
+npm install
+```
 
-## Learn More
+2. Configure the environment variables:
 
-To learn more about Next.js, take a look at the following resources:
+   Create a `.env` file in the root directory with the following keys:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+DATABASE_URL=your_postgres_database_url
+JWT_SECRET=your_jwt_secret
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Migrate the database:
 
-## Deploy on Vercel
+```sh
+ npx prisma migrate dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Start the development server:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```sh
+    npm run dev
+```
+
+5. Open your browser and navigate to http://localhost:3000.
+
+### Usage
+
+Sign up or log in.
+Browse courses and view details.
+
+### Folder Structure
+
+/pages
+|--- /api
+| |--- /courses
+| | |--- [id].js
+| |--- auth.js
+| |--- courses.js
+| |--- enroll.js
+| |--- user.js
+
+/prisma
+|--- /migrations
+|--- schema.prisma
+
+/public
+|--- /images
+
+/src
+|--- /app
+| |--- /login
+| | |--- page.tsx
+| |--- /signup
+| | |--- page.tsx
+| |--- /courses
+| | |--- /[id]
+| | | |--- page.tsx
+| | |--- page.tsx
+| |--- /dashboard
+| | |--- page.tsx
+|--- /components
+| |--- Navbar.tsx
+| |--- CourseCard.tsx
+| |--- CourseDetail.tsx
+| |--- Hero.tsx
+| |--- InfoCard.tsx
+| |--- StatCard.tsx
+| |--- TeamMemberCard.tsx
+| |--- TestimonialCard.tsx
+|--- /Testimonials
+| |--- page.tsx
+|--- globals.css
+|--- layout.tsx
+|--- page.tsx
+
+|--- /lib
+| |--- api.ts
+
+### API Endpoints
+
+Method Endpoint Description
+POST /api/auth?action=signup Create a new user.
+POST /api/auth?action=login Authenticate a user.
+GET /api/courses Fetch all courses.
+GET /api/courses/:id Fetch course details.
+POST /api/enroll Enroll in a course.
+GET /api/courses Fetch all enrollments.
+GET /api/courses/:id Fetch enrollment details.
+
+### Future Improvements
+
+    Add real-time chat or discussion forums for courses.
+    Implement a payment gateway for premium courses.
+    Enhance accessibility for better inclusivity.
+    Optimize database queries for large-scale deployments.
+
+### Contributors
+
+    Aziz Ali - Backend Developer
+    Wafaa Gaafar - Frontend Developer
+
+### License
+
+This project is licensed under the MIT License. See the LICENSE file for more information.
+Acknowledgments
+
+Special thanks to ALX Africa for providing the learning opportunity and guiding us through the project.
