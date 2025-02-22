@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import CourseCard from "../components/CourseCard";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 interface Course {
   id: number;
@@ -18,6 +19,7 @@ interface Course {
 
 export default function CoursesPage() {
   const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
   const [enrolledCourseIds, setEnrolledCourseIds] = useState<number[]>([]);
   const [userName, setUserName] = useState<string | null>(null);
 
@@ -59,6 +61,12 @@ export default function CoursesPage() {
 
         const allCoursesData = await coursesResponse.json();
         setAllCourses(allCoursesData);
+
+        // Filter enrolled courses
+        const enrolled = allCoursesData.filter((course: Course) =>
+          enrolledIds.includes(course.id)
+        );
+        setEnrolledCourses(enrolled);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -113,6 +121,18 @@ export default function CoursesPage() {
     }
   };
 
+  // Group courses by category
+  const groupedCourses = allCourses.reduce<Record<string, Course[]>>(
+    (acc, course) => {
+      if (!acc[course.category]) {
+        acc[course.category] = [];
+      }
+      acc[course.category].push(course);
+      return acc;
+    },
+    {}
+  );
+
   return (
     <>
       <Navbar />
@@ -122,24 +142,53 @@ export default function CoursesPage() {
         </h1>
         {userName && (
           <p className="text-lg text-gray-600 mb-4 text-center">
-            Welcome back, {userName}!
+            Welcome, {userName}!
           </p>
         )}
         <p className="text-lg text-gray-600 mb-12 text-center max-w-3xl">
           Whether you want to kickstart a new career, upskill for your current
           job, or learn something new for fun, we have a course for you.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-          {allCourses.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              isEnrolled={enrolledCourseIds.includes(course.id)}
-              onEnroll={handleEnroll} // Pass handleEnroll function here
-            />
-          ))}
-        </div>
+
+        {/* Enrolled Courses Section */}
+        {enrolledCourses.length > 0 && (
+          <div className="mb-16 w-full">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-6">
+              Your Enrolled Courses
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {enrolledCourses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                  isEnrolled={true}
+                  onEnroll={handleEnroll}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Categorized Courses Section */}
+        {Object.entries(groupedCourses).map(([category, courses]) => (
+          <div key={category} className="mb-16 w-full">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-6">
+              {category}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {courses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                  isEnrolled={enrolledCourseIds.includes(course.id)}
+                  onEnroll={handleEnroll}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
+      <Footer />
     </>
   );
 }

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Testimonial from "./Testimonials/Testimonial";
+import Footer from "./components/Footer";
 
 interface Course {
   id: number;
@@ -212,7 +213,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="grid gap-8 mb-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                {allCourses.map((course) => (
+                {allCourses.slice(3, 9).map((course) => (
                   <CourseCard
                     key={course.id}
                     course={course}
@@ -304,7 +305,8 @@ export default function Home() {
           </>
         )}
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
+      {/* <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer> */}
+      <Footer />
     </div>
   );
 }
